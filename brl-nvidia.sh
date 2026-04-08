@@ -12,7 +12,7 @@ if [ $1 == "install" ]; then
 	else
 		for stratum in $(brl list)
 		do
-			sudo strat -r $stratum sh ~/brl-nvidia/nvidia-${driverVersion}.run --no-kernel-modules
+			if [ $stratum != $(brl which 1) ]; then sudo strat -r $stratum sh ~/brl-nvidia/nvidia-${driverVersion}.run --no-kernel-modules; fi
 		done
 	fi
 
