@@ -6,7 +6,7 @@ brl-nvidia [argument] [argument]
 
 **install**/**update** [stratum] :
 Install the drivers to the given stratum.
-If "all" is specified as the stratum, the drivers will be installed to every strata.
+Specifying "all" will install the drivers to all the strata.
 
 **remove** [stratum] :
 Remove drivers on the given stratum.
