@@ -6,7 +6,9 @@ driverVersion=$(nvidia-smi | grep  "Driver Version" | cut -d ' ' -f 3)
 targetedStratum=$2
 
 function downloadDrivers() {
-	curl https://us.download.nvidia.com/XFree86/Linux-x86_64/$driverVersion/NVIDIA-Linux-x86_64-$driverVersion.run -o $usedDir/brl-nvidia/nvidia-$driverVersion.run
+	if [[ ! -e "${usedDir}/brl-nvidia/nvidia-${driverVersion}.run" ]] || [[ $1 == "force" ]]; then
+		curl https://us.download.nvidia.com/XFree86/Linux-x86_64/$driverVersion/NVIDIA-Linux-x86_64-$driverVersion.run -o $usedDir/brl-nvidia/nvidia-$driverVersion.run
+	fi
 }
 
 function checksumReDownloadDrivers() {
@@ -18,12 +20,11 @@ function checksumReDownloadDrivers() {
 }
 
 function installDrivers {
-	
-	if [[ ! -e "${usedDir}/brl-nvidia/nvidia-${driverVersion}.run" ]]; then downloadDrivers; fi
-	if [[ $targetedStratum == "all" ]]; then
+	downloadDrivers
+	if [[ $targetedStratum == "all" ]] || [[ $targetedStratum == "" ]]; then
 		for stratum in $(brl list)
 		do
-			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]]; then echo "${stratum}"; strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules; fi
+			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo "${stratum}"; strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules; fi
 			checksumReDownloadDrivers
 		done
 	else
@@ -40,4 +41,12 @@ if [ $1 == "install" ]; then
 	installDrivers
 elif [[ $1 == "remove" ]]; then
 	strat -r $targetedStratum nvidia-uninstall
+elif [[ $1 == "install-script" ]]; then
+	cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
+	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
+elif [[ $1 == "update-script" ]]; then
+	git clone https://github.com/Susheate/brl-nvidia
+	cd brl-nvidia
+	cp brl-nvidia.sh /bedrock/strata/${initStratum}/bin/brl-nvidia
+	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
 fi
