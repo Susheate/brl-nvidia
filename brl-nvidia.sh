@@ -5,6 +5,8 @@ usedDir="/bedrock/strata/${initStratum}/var/tmp" # Change later
 driverVersion=$(nvidia-smi | grep  "Driver Version" | cut -d ' ' -f 3)
 targetedStratum=$2
 
+if [ $(id -u) != 0 ]; then echo "You must run brl-nvidia as root."; exit 2; fi
+
 function downloadDrivers() {
 	if [[ ! -e "${usedDir}/brl-nvidia/nvidia-${driverVersion}.run" ]] || [[ $1 == "force" ]]; then
 		curl https://us.download.nvidia.com/XFree86/Linux-x86_64/$driverVersion/NVIDIA-Linux-x86_64-$driverVersion.run -o $usedDir/brl-nvidia/nvidia-$driverVersion.run
@@ -37,7 +39,7 @@ if [[ ! -e "${usedDir}/brl-nvidia" ]]; then
 	mkdir $usedDir/brl-nvidia
 fi
 
-if [ $1 == "install" ]; then
+if [[ $1 == "install" ]]; then
 	installDrivers
 elif [[ $1 == "remove" ]]; then
 	strat -r $targetedStratum nvidia-uninstall
