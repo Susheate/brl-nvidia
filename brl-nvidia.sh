@@ -44,9 +44,9 @@ elif [[ $1 == "remove" ]]; then
 elif [[ $1 == "install-script" ]]; then
 	cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
 	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
-#elif [[ $1 == "update-script" ]]; then
-#	git clone https://github.com/Susheate/brl-nvidia
-#	cd brl-nvidia
-#	cp brl-nvidia.sh /bedrock/strata/${initStratum}/bin/brl-nvidia
-#	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
+elif [[ $1 == "update-script" ]]; then
+	curl https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
+	cp $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/${initStratum}/bin/brl-nvidia
+	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
+	echo "Done"
 fi
