@@ -1,11 +1,12 @@
 #!/bin/bash
 
+if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 2; fi
+
 initStratum=$(brl which 1)
-usedDir="/bedrock/strata/${initStratum}/var/tmp" # Change later
+usedDir="/bedrock/strata/${initStratum}/var/tmp"
 driverVersion=$(nvidia-smi | grep  "Driver Version" | cut -d ' ' -f 3)
 targetedStratum=$2
 
-if [ $(id -u) != 0 ]; then echo "You must run brl-nvidia as root."; exit 2; fi
 
 function downloadDrivers() {
 	if [[ ! -e "${usedDir}/brl-nvidia/nvidia-${driverVersion}.run" ]] || [[ $1 == "force" ]]; then
@@ -50,5 +51,5 @@ elif [[ $1 == "update-script" ]]; then
 	curl https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
 	cp $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/${initStratum}/bin/brl-nvidia
 	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
-	echo "Done"
+	echo -e "\n\e[36mDone\e[0m"
 fi
