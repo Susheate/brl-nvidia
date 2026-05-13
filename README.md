@@ -11,6 +11,13 @@ Specifying "all" are not giving any argument will install the drivers to all the
 **remove** [stratum] :
 Remove drivers on the given stratum.
 
+**Example execution**
+
+Install the driver in arch strata.
+
+```
+sudo bash ./brl-nvidia.sh install arch
+```
 
 The script determines the drivers version from your init stratum in order to prevent version mismatch, therefore preventing the drivers from not working.
 Thus, the user needs to have drivers installed on their init stratum, preferably via package manager.
