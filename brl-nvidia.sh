@@ -51,16 +51,21 @@ if [[ ! -e "${usedDir}/brl-nvidia" ]]; then
 	mkdir $usedDir/brl-nvidia
 fi
 
-if [[ $1 == "install" ]]; then
-	installDrivers
-elif [[ $1 == "remove" ]]; then
-	removeDrivers
-elif [[ $1 == "install-script" ]]; then
-	cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
-	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
-elif [[ $1 == "update-script" ]]; then
-	curl https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
-	cp $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/${initStratum}/bin/brl-nvidia
-	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
-	echo -e "\n\e[36mDone\e[0m"
-fi
+case $1 in
+	"install")
+		installDrivers
+		;;
+	"remove")
+		removeDrivers
+		;;
+	"install-script")
+		cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
+		chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
+		;;
+	"update-script")
+		curl https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
+		cp $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/${initStratum}/bin/brl-nvidia
+		chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
+		echo -e "\n\e[36mDone\e[0m"
+		;;
+esac
