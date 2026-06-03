@@ -1,10 +1,10 @@
 #!/bin/bash
 
-if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 2; fi
+if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 1; fi
 
 initStratum=$(brl which 1)
 usedDir="/bedrock/strata/${initStratum}/var/tmp"
-driverVersion=$(nvidia-smi | grep  "Driver Version" | cut -d ' ' -f 3)
+driverVersion=$(nvidia-smi | grep  "Driver Version" | cut -d " " -f 3)
 targetedStratum=$2
 
 
@@ -24,26 +24,24 @@ function integrityCheck() {
 
 function installDrivers() {
 	downloadDrivers
-	if [[ $targetedStratum == "all" ]] || [[ $targetedStratum == "" ]]; then
-		for stratum in $(brl list)
-		do
+	if [[ $1 == "all" ]] || [[ $1 == "" ]]; then
+		for stratum in $(brl list); do
 			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo "${stratum}"; strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules; fi
 			integrityCheck
 		done
 	else
-		strat -r $targetedStratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules
+		strat -r $1 sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules
 		integrityCheck
 	fi
 }
 
 function removeDrivers() {
-	if [[ $targetedStratum == "all" ]] || [[ $targetedStratum == "" ]]; then
-		for stratum in $(brl list)
-		do
-			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo "${stratum}"; strat -r $stratum nvidia-uninstall; fi
+	if [[ $1 == "all" ]] || [[ $1 == "" ]]; then
+		for stratum in $(brl list); do
+			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo -e "\e[36m${stratum}\e[0m"; strat -r $stratum nvidia-uninstall; fi
 		done
 	else
-		strat -r $targetedStratum nvidia-uninstall
+		strat -r $1 nvidia-uninstall
 	fi
 }
 
@@ -53,10 +51,10 @@ fi
 
 case $1 in
 	"install")
-		installDrivers
+		installDrivers $targetedStratum
 		;;
 	"remove")
-		removeDrivers
+		removeDrivers $targetedStratum
 		;;
 	"install-script")
 		cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
