@@ -26,7 +26,10 @@ function installDrivers() {
 	downloadDrivers
 	if [[ $1 == "all" ]] || [[ $1 == "" ]]; then
 		for stratum in $(brl list); do
-			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo "${stratum}"; strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules; fi
+			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
+				echo "${stratum}"
+				strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules
+			fi
 			integrityCheck
 		done
 	else
@@ -38,7 +41,10 @@ function installDrivers() {
 function removeDrivers() {
 	if [[ $1 == "all" ]] || [[ $1 == "" ]]; then
 		for stratum in $(brl list); do
-			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo -e "\e[36m${stratum}\e[0m"; strat -r $stratum nvidia-uninstall; fi
+			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
+				echo -e "\e[36m${stratum}\e[0m"
+				strat -r $stratum nvidia-uninstall
+			fi
 		done
 	else
 		strat -r $1 nvidia-uninstall
