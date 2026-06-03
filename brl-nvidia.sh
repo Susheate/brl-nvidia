@@ -22,7 +22,7 @@ function integrityCheck() {
 	fi
 }
 
-function installDrivers {
+function installDrivers() {
 	downloadDrivers
 	if [[ $targetedStratum == "all" ]] || [[ $targetedStratum == "" ]]; then
 		for stratum in $(brl list)
@@ -36,6 +36,17 @@ function installDrivers {
 	fi
 }
 
+function removeDrivers() {
+	if [[ $targetedStratum == "all" ]] || [[ $targetedStratum == "" ]]; then
+		for stratum in $(brl list)
+		do
+			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then echo "${stratum}"; strat -r $stratum nvidia-uninstall; fi
+		done
+	else
+		strat -r $targetedStratum nvidia-uninstall
+	fi
+}
+
 if [[ ! -e "${usedDir}/brl-nvidia" ]]; then
 	mkdir $usedDir/brl-nvidia
 fi
@@ -43,7 +54,7 @@ fi
 if [[ $1 == "install" ]]; then
 	installDrivers
 elif [[ $1 == "remove" ]]; then
-	strat -r $targetedStratum nvidia-uninstall
+	removeDrivers
 elif [[ $1 == "install-script" ]]; then
 	cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
 	chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
