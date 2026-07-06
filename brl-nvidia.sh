@@ -4,7 +4,7 @@ if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 1; fi
 
 initStratum=$(brl which 1)
 usedDir="/bedrock/strata/${initStratum}/var/tmp"
-driverVersion=$(nvidia-smi | grep  "Driver Version" | cut -d " " -f 3)
+driverVersion=$(nvidia-smi | grep  "KMD Version" | cut -d " " -f 3)
 targetedStratum=$2
 
 
