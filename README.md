@@ -14,7 +14,7 @@ Install the driver on a cachyos stratum.
 ```
 sudo brl-nvidia install cachyos
 ```
-  *Note that this example assumes that the script is in your PATH (which can be done by using* ```sudo bash path_to_brl-nvidia install-script```*).*
+  *Note that this example assumes that the script is in your $PATH (which can be done by using* ```sudo bash path_to_brl-nvidia install-script```*).*
 
 **remove** [stratum] :
 Remove drivers on the given stratum.
