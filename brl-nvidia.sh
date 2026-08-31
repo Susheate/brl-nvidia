@@ -4,7 +4,7 @@ if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 1; fi
 
 initStratum=$(brl which 1)
 usedDir="/bedrock/strata/${initStratum}/var/tmp"
-driverVersion=$(nvidia-smi | grep  "KMD Version" | cut -d " " -f 3)
+driverVersion=$(nvidia-smi | grep "KMD Version" | cut -d " " -f 3)
 targetedStratum=$2
 
 
@@ -51,6 +51,17 @@ function removeDrivers() {
 	fi
 }
 
+function update() {
+	downloadDrivers
+	for stratum in $(brl list); do
+		if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && [[ $(strat $stratum nvidia-smi | grep "KMD Version" | cut -d " " -f 3) == $driverVersion ]]; then
+			echo "${stratum}"
+			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules --ui=none --no-questions --no-x-check
+		fi
+		integrityCheck
+	done
+}
+
 if [[ ! -e "${usedDir}/brl-nvidia" ]]; then
 	mkdir $usedDir/brl-nvidia
 fi
@@ -61,6 +72,9 @@ case $1 in
 		;;
 	"remove")
 		removeDrivers $targetedStratum
+		;;
+	"update")
+		update
 		;;
 	"install-script")
 		cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
