@@ -51,7 +51,7 @@ function removeDrivers() {
 	fi
 }
 
-function update() {
+function updateDrivers() {
 	downloadDrivers
 	for stratum in $(brl list); do
 		if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && [[ $(strat $stratum nvidia-smi | grep "KMD Version" | cut -d " " -f 3) == $driverVersion ]]; then
@@ -74,7 +74,7 @@ case $1 in
 		removeDrivers $targetedStratum
 		;;
 	"update")
-		update
+		updateDrivers
 		;;
 	"install-script")
 		cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
