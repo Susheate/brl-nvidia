@@ -26,7 +26,7 @@ Remove drivers on a cachyos stratum.
 # brl-nvidia remove cachyos
 ```
 
-**update**
+**update** :
 Update NVIDIA drivers on strata providing the userspace drivers. *Note : the bedrock, init and bpt stratum aren't affected.*
 
 Usage example :
