@@ -15,7 +15,7 @@ function downloadDrivers() {
 }
 
 function integrityCheck() {
-	if [[ $? == "2" ]]; then
+	if [[ $? == 2 ]]; then
 		echo "Re-downloading the drivers..."
 		downloadDrivers force
 		installDrivers
@@ -27,7 +27,7 @@ function installDrivers() {
 	if [[ $1 == "all" ]] || [[ $1 == "" ]]; then
 		for stratum in $(brl list); do
 			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
-				echo "${stratum}"
+				echo -e "\e[35m$stratum\e[0m"
 				strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules
 			fi
 			integrityCheck
@@ -42,7 +42,7 @@ function removeDrivers() {
 	if [[ $1 == "all" ]] || [[ $1 == "" ]]; then
 		for stratum in $(brl list); do
 			if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
-				echo -e "\e[36m${stratum}\e[0m"
+				echo -e "\e[35m$stratum\e[0m"
 				strat -r $stratum nvidia-uninstall
 			fi
 		done
@@ -54,9 +54,12 @@ function removeDrivers() {
 function updateDrivers() {
 	downloadDrivers
 	for stratum in $(brl list); do
-		if [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && [[ $(strat $stratum nvidia-smi | grep "KMD Version" | cut -d " " -f 3) == $driverVersion ]]; then
-			echo "${stratum}"
+		strat $stratum nvidia-smi
+		if [[ $? == 0 ]] && [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
+			echo -e "\e[35m$stratum\e[0m"
 			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules --ui=none --no-questions --no-x-check
+		else
+			echo -e "\e[36mSkipping\e[36m \e[35m$stratum\e[0m"
 		fi
 		integrityCheck
 	done
@@ -69,16 +72,20 @@ fi
 case $1 in
 	"install")
 		installDrivers $targetedStratum
+		echo -e "\n\e[36mDone\e[0m"
 		;;
 	"remove")
 		removeDrivers $targetedStratum
+		echo -e "\n\e[36mDone\e[0m"
 		;;
 	"update")
 		updateDrivers
+		echo -e "\n\e[36mDone\e[0m"
 		;;
 	"install-script")
 		cp $0 /bedrock/strata/${initStratum}/bin/brl-nvidia
 		chmod +x /bedrock/strata/${initStratum}/bin/brl-nvidia
+		echo -e "\n\e[36mDone\e[0m"
 		;;
 	"update-script")
 		curl https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
