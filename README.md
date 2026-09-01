@@ -40,7 +40,7 @@ The script determines the kernel driver's version from your init stratum in orde
 **Thus, the user needs to have the NVIDIA drivers installed on their init stratum, preferably via package manager.**
 
 Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
-The second option can be easily achieved by using :
+The latter can be easily achieved by using :
 ```
 sudo bash path_to_brl-nvidia install-script
 ```
