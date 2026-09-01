@@ -4,7 +4,7 @@ NVIDIA driver manager for Bedrock Linux.
 # Usage
 brl-nvidia [argument] [argument]
 
-**install** [stratum] :
+## install [stratum] :
 Install the drivers to the given stratum.
 Specifying "all" or not giving any argument will install the drivers to every stratum.
 
@@ -16,7 +16,7 @@ Install the driver on a cachyos stratum.
 ```
   *Note that this example and examples below assume that the script is in your $PATH (which can be done by using*`# bash path_to_brl-nvidia install-script`*).*
 
-**remove** [stratum] :
+## remove [stratum] :
 Remove drivers from the given stratum.
 
 Usage example :
@@ -26,7 +26,7 @@ Remove drivers on a cachyos stratum.
 # brl-nvidia remove cachyos
 ```
 
-**update** :
+## update :
 Update NVIDIA drivers on strata providing the userspace drivers. *Note : the bedrock, init and bpt stratum aren't affected.*
 
 Usage example :
