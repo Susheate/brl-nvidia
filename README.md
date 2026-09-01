@@ -39,7 +39,7 @@ sudo brl-nvidia update
 The script determines the kernel driver's version from your init stratum in order to prevent version mismatch between the said kernel driver and userspace drivers, therefore preventing the drivers from not working.
 **Thus, the user needs to have the NVIDIA drivers installed on their init stratum, preferably via package manager.**
 
-Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere withe the `brl-nvidia` command**.
+Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
 The second option can be easily achieved by using :
 ```
 sudo bash path_to_brl-nvidia install-script
