@@ -55,7 +55,7 @@ function updateDrivers() {
 	downloadDrivers
 	for stratum in $(brl list); do
 		strat $stratum nvidia-smi
-		if [[ $? == 0 ]] && [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
+		if [[ $? == 0 ]] && [[ $(strat $stratum nvidia-smi | grep "KMD Version" | cut -d " " -f 3) != $driverVersion ]] && [[ $stratum != $initStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
 			echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
 			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$driverVersion.run --no-kernel-modules -q --ui=none --no-x-check
 		else
