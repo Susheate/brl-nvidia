@@ -27,7 +27,7 @@ Remove drivers on a cachyos stratum.
 ```
 
 ## update :
-Update NVIDIA drivers on strata providing the userspace drivers. *Note : the bedrock, init and bpt stratum aren't affected.*
+Update NVIDIA drivers on strata providing the userspace drivers. *Note : the bedrock, kernel providing and bpt stratum aren't affected.*
 
 Usage example :
 ```
@@ -36,15 +36,15 @@ Usage example :
 
 # Installation
 
-The script determines the kernel driver's version from the init stratum in order to prevent version mismatch between the said kernel driver and userspace drivers, therefore preventing the drivers from not working.
-**Thus, the user needs to have the NVIDIA drivers installed on their init stratum, preferably via package manager.**
+The script determines the kernel driver's version from the stratum providing the kernel in order to prevent version mismatch between kernel drivers and userspace drivers, therefore preventing the drivers from not working.
+**Thus, the user needs to have the NVIDIA drivers installed on their stratum providing the kernel, preferably via package manager.**
 
 Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
 The latter can be easily achieved by using :
 ```
 # bash path_to_brl-nvidia install-script
 ```
-This will make a copy of the script into your init stratum's /usr/bin directory.
+This will make a copy of the script into your kernel providing stratum's /usr/bin directory.
 
 ## Updating
 *This assumes you've installed the script through `install-script`.*
