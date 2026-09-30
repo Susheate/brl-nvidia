@@ -55,7 +55,7 @@ function updateDrivers() {
 	downloadDrivers
 	for stratum in $(brl list); do
 		strat $stratum nvidia-smi
-		if [[ $? == 0 ]] && [[ $(strat $stratum nvidia-smi | grep 'NVIDIA-SMI' | awk -F ' ' '{print $3}') != $KMDVersion ]] && [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
+		if [[ $? == 18 ]] && [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
 			echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
 			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
 		else
@@ -83,8 +83,8 @@ case $1 in
 		echo -e "\e[36mDone\e[0m"
 		;;
 	"install-script")
-		cp $0 /bedrock/strata/${kernelStratum}/bin/brl-nvidia
-		chmod +x /bedrock/strata/${kernelStratum}/bin/brl-nvidia
+		cp $0 /bedrock/strata/$kernelStratum/bin/brl-nvidia
+		chmod +x /bedrock/strata/$kernelStratum/bin/brl-nvidia
 		echo -e "\e[36mDone\e[0m"
 		;;
 	"update-script")
