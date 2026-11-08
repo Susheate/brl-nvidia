@@ -25,7 +25,7 @@ To update the script, run the following :
 
 ## install [stratum] :
 Install the drivers to the given stratum.
-Specifying "all" or not giving any argument will install the drivers to every stratum.
+Specifying "all" will install the drivers to every stratum.
 
 Usage example :
 
