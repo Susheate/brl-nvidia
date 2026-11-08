@@ -1,6 +1,26 @@
 # brl-nvidia
 NVIDIA driver manager for Bedrock Linux.
 
+# Installation
+
+The script determines the kernel driver's version ~~from the stratum providing the kernel~~ (At least that's how it should be, currently the script uses what the user tells it to use) in order to prevent version mismatch between kernel drivers and userspace drivers, therefore preventing the drivers from not working.
+**Thus, the user needs to have the NVIDIA drivers installed on their stratum providing the kernel, preferably via package manager.**
+
+Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
+The latter can be easily achieved by using :
+```
+# bash brl-nvidia install-script
+```
+This will make a copy of the script into your kernel providing stratum's /usr/bin directory.
+
+## Updating
+*This assumes you've installed the script through `install-script`.*
+
+To update the script, run the following :
+```
+# brl-nvidia update-script
+```
+
 # Usage
 
 ## install [stratum] :
@@ -31,24 +51,4 @@ Update NVIDIA drivers on strata providing the userspace drivers. *Note : the bed
 Usage example :
 ```
 # brl-nvidia update
-```
-
-# Installation
-
-The script determines the kernel driver's version ~~from the stratum providing the kernel~~ (At least that's how it should be, currently the script uses what the user tells it to use) in order to prevent version mismatch between kernel drivers and userspace drivers, therefore preventing the drivers from not working.
-**Thus, the user needs to have the NVIDIA drivers installed on their stratum providing the kernel, preferably via package manager.**
-
-Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
-The latter can be easily achieved by using :
-```
-# bash brl-nvidia install-script
-```
-This will make a copy of the script into your kernel providing stratum's /usr/bin directory.
-
-## Updating
-*This assumes you've installed the script through `install-script`.*
-
-To update the script, run the following :
-```
-# brl-nvidia update-script
 ```
