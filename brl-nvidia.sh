@@ -117,12 +117,14 @@ case $1 in
  	;;
  "install-script")
  	checkRoot
+	prepareEnv
  	cp $0 /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	chmod +x /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	echo -e "\e[36mDone\e[0m"
  	;;
  "update-script")
  	checkRoot
+	prepareEnv
  	curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
  	cp $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	chmod +x /bedrock/strata/$kernelStratum/bin/brl-nvidia
