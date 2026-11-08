@@ -2,7 +2,6 @@
 NVIDIA driver manager for Bedrock Linux.
 
 # Usage
-brl-nvidia [argument] [argument]
 
 ## install [stratum] :
 Install the drivers to the given stratum.
@@ -10,9 +9,9 @@ Specifying "all" or not giving any argument will install the drivers to every st
 
 Usage example :
 
-Install the driver on a cachyos stratum.
+Install the driver on a arch stratum.
 ```
-# brl-nvidia install cachyos
+# brl-nvidia install arch
 ```
   *Note that this example and examples below assume that the script is in your $PATH (which can be done by using*`# bash path_to_brl-nvidia install-script`*).*
 
@@ -21,9 +20,9 @@ Remove drivers from the given stratum.
 
 Usage example :
 
-Remove drivers on a cachyos stratum.
+Remove drivers on a arch stratum.
 ```
-# brl-nvidia remove cachyos
+# brl-nvidia remove arch
 ```
 
 ## update :
@@ -36,7 +35,7 @@ Usage example :
 
 # Installation
 
-The script determines the kernel driver's version from the stratum providing the kernel in order to prevent version mismatch between kernel drivers and userspace drivers, therefore preventing the drivers from not working.
+The script determines the kernel driver's version ~~from the stratum providing the kernel~~ (At least that's how it should be, currently the script uses what the user tells it) in order to prevent version mismatch between kernel drivers and userspace drivers, therefore preventing the drivers from not working.
 **Thus, the user needs to have the NVIDIA drivers installed on their stratum providing the kernel, preferably via package manager.**
 
 Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
