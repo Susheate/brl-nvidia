@@ -1,0 +1,12 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Target = nvidia-open*
+
+[Action]
+Description = Updating the NVIDIA userpace drivers in strata providing them...
+When = PostTransaction
+Exec = /usr/bin/bash -c 'brl-nvidia update'
+NeedsTargets
