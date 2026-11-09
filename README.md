@@ -11,7 +11,7 @@ The latter can be easily achieved by using :
 ```
 $ curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o brl-nvidia.sh && su -c 'bash brl-nvidia.sh install-script'
 ```
-This will make a copy of the script into your kernel providing stratum's /usr/bin directory.
+This will fetch the script from this repository then make a copy of the script into your kernel-providing stratum's /usr/bin directory.
 
 ## Updating
 *This assumes you've installed the script through `install-script`.*
