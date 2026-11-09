@@ -9,7 +9,7 @@ The script determines the kernel driver's version ~~from the stratum providing t
 Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
 The latter can be easily achieved by using :
 ```
-# bash brl-nvidi.sh install-script
+$ curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o brl-nvidia.sh && su -c 'bash brl-nvidia.sh install-script'
 ```
 This will make a copy of the script into your kernel providing stratum's /usr/bin directory.
 
