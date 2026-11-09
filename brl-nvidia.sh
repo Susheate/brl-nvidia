@@ -130,7 +130,7 @@ case $1 in
  	chmod +x /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	echo -e "\e[36mDone\e[0m"
  	;;
- "--help")
-         echo -e "install \e[35mstratum\e[0m\n     Install NVIDIA userpace drivers in the selected stratum.\n\nremove \e[35mstratum\e[0m\n     Remove NVIDIA userpace drivers from the selected stratum.\n\nupdate\n     Update NVIDIA drivers in strata having NVIDIA drivers installed in to the same version as the NVIDIA kernel driver.\n\ninstall-script\n     Copies the script into the binaries directory of the stratum providing the kernel.\n\nupdate-script\n     Updates brl-nvidia."
+ "--help"|"")
+         echo -e "install \e[35mstratum\e[0m\n     Install NVIDIA userpace drivers in the selected stratum.\n\nremove \e[35mstratum\e[0m\n     Remove NVIDIA userpace drivers from the selected stratum.\n\nupdate\n     Update NVIDIA drivers in strata providing the NVIDIA userpace drivers, syncing them to the same version as the NVIDIA kernel driver's.\n\ninstall-script\n     Copies the script into the binaries directory of the stratum providing the kernel.\n\nupdate-script\n     Updates brl-nvidia."
          ;;
 esac
