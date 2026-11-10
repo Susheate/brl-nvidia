@@ -5,7 +5,7 @@ Operation = Upgrade
 Target = nvidia-open*
 
 [Action]
-Description = Updating the NVIDIA userpace drivers in strata providing them...
+Description = Syncing NVIDIA userspace drivers to match the kernel driver's version...
 When = PostTransaction
-Exec = /usr/bin/bash -c 'brl-nvidia update'
+Exec = /usr/bin/bash -c 'brl-nvidia sync'
 NeedsTargets
