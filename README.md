@@ -9,16 +9,21 @@ The script determines the kernel driver's version ~~from the stratum providing t
 Two options are possible : downloading the script and using it on the go, or referencing the script in your $PATH **which allows using the script from anywhere with the `brl-nvidia` command**.
 The latter can be easily achieved by using :
 ```
-$ curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o brl-nvidia.sh && su -c 'bash brl-nvidia.sh install-script'
+bash brl-nvidia.sh install-brl-nvidia
+```
+**You can also directly fetch the script :**
+From the latest commit
+```
+$ curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o brl-nvidia.sh && su -c 'bash brl-nvidia.sh install-brl-nvidia'
 ```
 This will fetch the script from this repository then make a copy of the script into your kernel-providing stratum's /usr/bin directory.
 
 ## Updating
-*This assumes you've installed the script through `install-script`.*
+*This assumes you've installed the script through `install-brl-nvidia`.*
 
 To update the script, run the following :
 ```
-# brl-nvidia update-script
+# brl-nvidia update
 ```
 
 # Usage
@@ -33,7 +38,7 @@ Install the driver on a arch stratum.
 ```
 # brl-nvidia install arch
 ```
-  *Note that this example and examples below assume that the script is in your $PATH (which can be done by using*`# bash path_to_brl-nvidia install-script`*).*
+  *Note that this example and examples below assume that the script is in your $PATH (which can be done by using*`# bash path_to_brl-nvidia install-brl-nvidia`*).*
 
 ## remove [stratum] :
 Remove drivers from the given stratum.
@@ -45,10 +50,10 @@ Remove drivers on a arch stratum.
 # brl-nvidia remove arch
 ```
 
-## update :
+## sync :
 Update NVIDIA drivers on strata providing the userspace drivers. *Note : the bedrock, kernel providing and bpt stratum aren't affected.*
 
 Usage example :
 ```
-# brl-nvidia update
+# brl-nvidia sync
 ```

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function prepareEnv() {
+prepareEnv() {
 	if [[ ! -e /home/$(id -nu 1000)/.config/brl-nvidia/config ]] || [[ $(cat /home/$(id -nu 1000)/.config/brl-nvidia/config) == "" ]]; then
 		if [[ ! -e /home/$(id -nu 1000)/.config/brl-nvidia/ ]]; then runuser -l $(id -nu 1000) -s /bin/bash -c -- 'mkdir ~/.config/brl-nvidia/'; fi
 		stratList=()
@@ -24,11 +24,11 @@ function prepareEnv() {
 	export KMDVersion=$(modinfo -F version nvidia)
 }
 
-function checkRoot() {
+checkRoot() {
 	if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 1; fi
 }
 
-function downloadDrivers() {
+downloadDrivers() {
 	if [[ ! -e "$usedDir/brl-nvidia/nvidia-$KMDVersion.run" ]] || [[ $1 == "force" ]]; then
 		if [[ ! -e "$usedDir/brl-nvidia" ]]; then
 			mkdir $usedDir/brl-nvidia
@@ -37,7 +37,7 @@ function downloadDrivers() {
 	fi
 }
 
-function integrityCheck() {
+integrityCheck() {
 	if [[ $? == 2 ]]; then
 		echo "Re-downloading the drivers..."
 		downloadDrivers force
@@ -45,7 +45,7 @@ function integrityCheck() {
 	fi
 }
 
-function installDrivers() {
+installDrivers() {
 	prepareEnv
 	downloadDrivers
 	if [[ $1 == "all" ]]; then
@@ -62,7 +62,7 @@ function installDrivers() {
 	fi
 }
 
-function removeDrivers() {
+removeDrivers() {
 	prepareEnv
 	if [[ $1 == "all" ]]; then
 		for stratum in $(brl list); do
@@ -76,7 +76,7 @@ function removeDrivers() {
 	fi
 }
 
-function updateDrivers() {
+updateDrivers() {
 	prepareEnv
 	downloadDrivers
 	for stratum in $(brl list); do
@@ -95,6 +95,18 @@ function updateDrivers() {
 	done
 }
 
+pmHook() {
+	checkRoot
+	prepareEnv
+	case $(echo $kernelStratum) in
+		"arch"|"artix"|"cachyos")
+			curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/pm-hooks/ALPM zz-brl-nvidia-update.hook -o zz-brl-nvidia-update.hook
+			mv -f zz-brl-nvidia-update.hook /bedrock/strata/$kernelStratum/usr/share/libalpm/hooks/
+			echo -e "\e[36mDone\e[0m"
+		;;
+	esac
+}
+
 
 case $1 in
  "install")
@@ -109,28 +121,31 @@ case $1 in
  	removeDrivers $targetedStratum
  	echo -e "\e[36mDone\e[0m"
  	;;
- "update")
+ "sync")
  	checkRoot
 	targetedStratum=$2
  	updateDrivers
  	echo -e "\e[36mDone\e[0m"
  	;;
- "install-script")
+ "install-brl-nvidia")
  	checkRoot
 	prepareEnv
- 	cp $0 /bedrock/strata/$kernelStratum/bin/brl-nvidia
+ 	mv -f $0 /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	chmod +x /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	echo -e "\e[36mDone\e[0m"
  	;;
- "update-script")
+ "hook-pm")
+	 pmHook
+	 ;;
+ "update")
  	checkRoot
 	prepareEnv
  	curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o $usedDir/brl-nvidia/brl-nvidia.sh
- 	cp $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/$kernelStratum/bin/brl-nvidia
+ 	mv -f $usedDir/brl-nvidia/brl-nvidia.sh /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	chmod +x /bedrock/strata/$kernelStratum/bin/brl-nvidia
  	echo -e "\e[36mDone\e[0m"
  	;;
  "--help"|"")
-         echo -e "install \e[35mstratum\e[0m\n     Install NVIDIA userpace drivers in the selected stratum.\n\nremove \e[35mstratum\e[0m\n     Remove NVIDIA userpace drivers from the selected stratum.\n\nupdate\n     Update NVIDIA drivers in strata providing the NVIDIA userpace drivers, syncing them to the same version as the NVIDIA kernel driver's.\n\ninstall-script\n     Copies the script into the binaries directory of the stratum providing the kernel.\n\nupdate-script\n     Updates brl-nvidia."
+         echo -e "install \e[35mstratum\e[0m\n     Install NVIDIA userpace drivers in the selected stratum.\n\nremove \e[35mstratum\e[0m\n     Remove NVIDIA userpace drivers from the selected stratum.\n\nsync\n     Update NVIDIA drivers in strata providing the NVIDIA userpace drivers, syncing them to the same version as the NVIDIA kernel driver's.\n\ninstall-brl-nvidia\n     Copies the script into the binaries directory of the stratum providing the kernel.\n\nupdate\n     Updates brl-nvidia."
          ;;
 esac
