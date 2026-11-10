@@ -11,12 +11,14 @@ The latter can be easily achieved by using :
 ```
 bash brl-nvidia.sh install-brl-nvidia
 ```
+This will fetch the script from the repository and make a copy of it into your kernel-providing stratum's binaries directory (/usr/bin).
+
 **You can also directly fetch the script :**
+
 From the latest commit
 ```
 $ curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/brl-nvidia.sh -o brl-nvidia.sh && su -c 'bash brl-nvidia.sh install-brl-nvidia'
 ```
-This will fetch the script from this repository then make a copy of the script into your kernel-providing stratum's /usr/bin directory.
 
 ## Updating
 *This assumes you've installed the script through `install-brl-nvidia`.*
