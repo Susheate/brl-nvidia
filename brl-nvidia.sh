@@ -25,7 +25,7 @@ prepareEnv() {
 }
 
 checkRoot() {
-	if [ $(id -u) != 0 ]; then echo "brl-nvidia requires root."; exit 1; fi
+	if [ $(id -u) != 0 ]; then echo "This operation requires root."; exit 1; fi
 }
 
 downloadDrivers() {
@@ -48,32 +48,48 @@ integrityCheck() {
 installDrivers() {
 	prepareEnv
 	downloadDrivers
-	if [[ $1 == "all" ]]; then
-		for stratum in $(brl list); do
-			if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
-				echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
-				strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
-			fi
-			integrityCheck $2
-		done
-	else
-		strat -r $1 sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
-		integrityCheck $2
-	fi
+	case $1 in
+	 "all")
+	 	for stratum in $(brl list); do
+	 		if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
+	 			echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
+	 			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
+	 		fi
+	 		integrityCheck $2
+	 	done
+ 		echo -e "\e[36mDone\e[0m"
+	 	;;
+	 "")
+		echo "A stratum must be specified."
+		;;
+	 *)
+	 	strat -r $1 sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
+	 	integrityCheck $2
+ 		echo -e "\e[36mDone\e[0m"
+	 	;;
+	esac
 }
 
 removeDrivers() {
 	prepareEnv
-	if [[ $1 == "all" ]]; then
+	case $1 in
+	 "all")
 		for stratum in $(brl list); do
 			if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]]; then
 				echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
 				strat -r $stratum nvidia-uninstall -q --ui=none
 			fi
 		done
-	else
+ 		echo -e "\e[36mDone\e[0m"
+		;;
+	 "")
+		echo "A stratum must be specified."
+		;;
+	 *)
 		strat -r $1 nvidia-uninstall -q --ui=none
-	fi
+ 		echo -e "\e[36mDone\e[0m"
+		;;
+	esac
 }
 
 updateDrivers() {
@@ -96,14 +112,13 @@ updateDrivers() {
 }
 
 pmHook() {
-	checkRoot
 	prepareEnv
 	case $(echo $kernelStratum) in
-		"arch"|"artix"|"cachyos")
-			curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/pm-hooks/ALPM zz-brl-nvidia-update.hook -o zz-brl-nvidia-update.hook
-			mv -f zz-brl-nvidia-update.hook /bedrock/strata/$kernelStratum/usr/share/libalpm/hooks/
-			echo -e "\e[36mDone\e[0m"
-		;;
+	 "arch"|"artix"|"cachyos")
+	 	curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/pm-hooks/ALPM zz-brl-nvidia-update.hook -o zz-brl-nvidia-update.hook
+	 	mv -f zz-brl-nvidia-update.hook /bedrock/strata/$kernelStratum/usr/share/libalpm/hooks/
+	 	echo -e "\e[36mDone\e[0m"
+	 ;;
 	esac
 }
 
@@ -113,13 +128,11 @@ case $1 in
  	checkRoot
 	targetedStratum=$2
  	installDrivers $targetedStratum
- 	echo -e "\e[36mDone\e[0m"
  	;;
  "remove")
  	checkRoot
 	targetedStratum=$2
  	removeDrivers $targetedStratum
- 	echo -e "\e[36mDone\e[0m"
  	;;
  "sync")
  	checkRoot
@@ -135,8 +148,9 @@ case $1 in
  	echo -e "\e[36mDone\e[0m"
  	;;
  "hook-pm")
-	 pmHook
-	 ;;
+	checkRoot
+	pmHook
+	;;
  "update")
  	checkRoot
 	prepareEnv
