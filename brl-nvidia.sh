@@ -115,7 +115,7 @@ pmHook() {
 	prepareEnv
 	case $(echo $kernelStratum) in
 	 "arch"|"artix"|"cachyos")
-	 	curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/pm-hooks/ALPM zz-brl-nvidia-update.hook -o zz-brl-nvidia-update.hook
+	 	curl -f https://raw.githubusercontent.com/Susheate/brl-nvidia/refs/heads/main/pm-hooks/ALPM%20zz-brl-nvidia-update.hook -o zz-brl-nvidia-update.hook
 	 	mv -f zz-brl-nvidia-update.hook /bedrock/strata/$kernelStratum/usr/share/libalpm/hooks/
 	 	echo -e "\e[36mDone\e[0m"
 	 ;;
