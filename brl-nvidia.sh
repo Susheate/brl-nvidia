@@ -23,7 +23,7 @@ prepareEnv() {
 	export usedDir="/bedrock/strata/$kernelStratum/var/tmp"
 	if [[ $(modinfo -F version nvidia | echo $? | tail -n 1)==1 ]]; then
 		echo -e "\e[36mFalling back to KMD version detection through filesystem discovery method\e[0m"
-		export KMDVersion=$(modinfo -F version $(find /usr/lib/modules -name "nvidia.ko*" | sort -V | tail -n 1)) # Fix an edge case where the user attempts an operation that requires to determine kernel module version after a kernel upgrade, without reboot, modinfo -F nvidia would return that the NVIDIA driver wasn't found as it's searching under /usr/lib/modules/kernel/<the-old-kernel>, so instead we're searching the module with a simple find. Though, this method is unreliable if multiple kernels are instead, as we're just picking the most recent kernel. If anyon has a solution, feel free to contribute !
+		export KMDVersion=$(modinfo -F version $(find /usr/lib/modules -name "nvidia.ko*" | sort -V | tail -n 1)) # Fix an edge case in which the user would attempts an operation that requires to determine the kernel module's version after a kernel upgrade, without a reboot, modinfo -F nvidia would return that the NVIDIA module wasn't found since it's searching under /usr/lib/modules/kernel/<old-kernel-version>, so instead we're searching the module with a simple find. Though, this method is unreliable if multiple kernels are installed, as we're just picking the most recent one. If anyone has a better solution, feel free to contribute !
 	else
 		export KMDVersion=$(modinfo -F version nvidia)
 	fi
