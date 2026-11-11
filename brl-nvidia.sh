@@ -21,7 +21,7 @@ prepareEnv() {
 	
 	export kernelStratum=$(runuser -l $(id -nu 1000) -s /bin/bash -c -- 'cat ~/.config/brl-nvidia/config')
 	export usedDir="/bedrock/strata/$kernelStratum/var/tmp"
-	if [[ $(modinfo -F version nvidia | echo $? | tail -n 1) == 1 ]]; then
+	if [[ $(modinfo -F version nvidia > /dev/null 2>&1; echo $?) == 1 ]]; then
 		echo -e "\e[36mFalling back to KMD version detection through filesystem discovery method\e[0m"
 		export KMDVersion=$(modinfo -F version $(find /usr/lib/modules -name "nvidia.ko*" | sort -V | tail -n 1)) # Fix an edge case in which the user would attempts an operation that requires to determine the kernel module's version after a kernel upgrade, without a reboot, modinfo -F nvidia would return that the NVIDIA module wasn't found since it's searching under /usr/lib/modules/kernel/<old-kernel-version>, so instead we're searching the module with a simple find. Though, this method is unreliable if multiple kernels are installed, as we're just picking the most recent one. If anyone has a better solution, feel free to contribute !
 	else
@@ -101,7 +101,7 @@ syncDrivers() {
 	prepareEnv
 	downloadDrivers
 	for stratum in $(brl list); do
-		if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && [[ $(strat $stratum nvidia-smi | echo $? | tail -n 1) == 18 ]]; then
+		if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && [[ $(strat $stratum nvidia-smi > /dev/null 2>&1; echo $?) == 18 ]]; then
 			echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
 			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
 		else
