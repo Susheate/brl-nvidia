@@ -101,7 +101,7 @@ syncDrivers() {
 	prepareEnv
 	downloadDrivers
 	for stratum in $(brl list); do
-		if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && { [[ $(strat $stratum nvidia-smi 1>/dev/null; echo $?) == 18 ]] || { [[ $(strat $stratum nvidia-smi --query-gpu=driver_version --format=noheader 2>/dev/null) != $KMDVersion ]] && [[ $(strat $stratum nvidia-smi 1>/dev/null; echo $?) == 0 ]] } }; then
+		if [[ $stratum != $kernelStratum ]] && [[ $stratum != "bedrock" ]] && [[ $stratum != "bpt" ]] && { [[ $(strat $stratum nvidia-smi 2>/dev/null; echo $?) == 18 ]] || { [[ $(strat $stratum nvidia-smi --query-gpu=driver_version --format=noheader 2>/dev/null) != $KMDVersion ]] && [[ $(strat $stratum nvidia-smi 2>/dev/null; echo $?) == 0 ]] } }; then
 			echo -e "\e[36mProceeding with\e[36m \e[35m$stratum\e[0m"
 			strat -r $stratum sh $usedDir/brl-nvidia/nvidia-$KMDVersion.run --no-kernel-modules -q --ui=none --no-x-check
 		else
